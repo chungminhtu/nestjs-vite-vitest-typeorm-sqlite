@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
-import insertDataWithPrimaryKeyId from '../../../orm.config';
+import insertDataWithPrimaryKeyId from '../../orm.config';
 import { Product } from '../entities/product.entity';
 
 export default class CreateProducts implements Seeder {

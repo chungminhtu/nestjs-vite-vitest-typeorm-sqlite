@@ -2,8 +2,8 @@
 import dotenv from 'dotenv';
 import { DataSource, DeepPartial, EntityTarget, ObjectLiteral } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { Product } from './src/product/entities/product.entity';
-import CreateProducts from './src/product/seed/product.seed';
+import { Product } from './product/entities/product.entity';
+import CreateProducts from './product/seed/product.seed';
 dotenv.config({ path: '.env' });
 
 export const db_config: any = {

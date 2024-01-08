@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { db_config } from '../orm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { db_config } from './orm.config';
 import { Product } from './product/entities/product.entity';
 import { ProductModule } from './product/product.module';
 

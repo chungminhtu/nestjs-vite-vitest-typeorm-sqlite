@@ -6,8 +6,8 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
-import { db_config } from '../orm.config';
 import { AppModule } from './app.module';
+import { db_config } from './orm.config';
 
 export let viteNodeApp;
 
