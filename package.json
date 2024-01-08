@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "description": "",
   "author": "",
+  "type": "module",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "dev": "nodemon --exec \"cross-env NODE_ENV=vite vite build --mode development && node ./dist/main.cjs\" -e ts --ignore dist/",
-    "build": "nest build",
-    "start": "nest start"
+    "vitest": "vitest"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

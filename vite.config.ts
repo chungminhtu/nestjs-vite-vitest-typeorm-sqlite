@@ -38,7 +38,7 @@ export default defineConfig(({ command, mode }) => {
       testTimeout: 600000,
       passWithNoTests: true,
       include: ['**/*.e2e-test.ts', '**/*.spec.ts'],
-      setupFiles: [resolve(__dirname, './test/common/vitest-setup.ts')],
+      setupFiles: [resolve(__dirname, './test/vitest-setup.ts')],
       environment: 'node',
     },
     esbuild: false,

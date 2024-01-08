@@ -8,11 +8,13 @@ export default class CreateProducts implements Seeder {
     const products = [
       {
         id: 1,
-        product_name: 'Chuối hột',
+        product_name: 'Apple',
+        description: 'Test the apple',
       } as Product,
       {
         id: 2,
-        product_name: 'Chuối hột',
+        product_name: 'Onion',
+        description: 'Test the onion',
       } as Product,
     ];
 

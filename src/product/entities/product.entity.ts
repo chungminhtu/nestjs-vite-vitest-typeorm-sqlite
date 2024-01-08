@@ -1,6 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,6 +14,6 @@ export class Product {
   @IsNotEmpty()
   description: string;
 
-  @Column({ nullable: false })
-  age?: number;
+  @Column({ nullable: true })
+  stock?: number;
 }
