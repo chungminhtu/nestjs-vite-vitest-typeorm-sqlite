@@ -1,0 +1,80 @@
+{
+    "editor.tabSize": 2,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "[typescript]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll": true
+      },
+      "editor.formatOnSave": true
+    },
+    "[javascript]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll": true
+      },
+      "editor.formatOnSave": true
+    },
+    "files.autoSaveDelay": 1000,
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": true,
+    "window.zoomLevel": 0,
+    "editor.fontSize": 14,
+    "eslint.lintTask.enable": true,
+    "eslint.format.enable": true,
+    "eslint.validate": ["typescript"],
+    "files.defaultLanguage": "typescript",
+    "files.trimTrailingWhitespace": true,
+    "files.exclude": {
+      "**/*dist*": true,
+      "**/*coverage*": true,
+      "**/*node_modules": true,
+      "**/*package-lock.json*": true,
+      "**/pnpm-lock.yaml": true,
+      "**/*yarn.lock*": true,
+      "**/build": true,
+      "**/.angular": true,
+      "**/.docusaurus": true
+    },
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+    "typescript.preferences.importModuleSpecifier": "project-relative",
+    "hediet.vscode-drawio.theme": "atlas",
+    "vsicons.presets.angular": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.activeIconPack": "nest",
+    "material-icon-theme.folders.associations": {
+      "context": "app",
+      "resolvers": "controller",
+      "types": "class",
+      "entities": "class",
+      "migrations": "import",
+      "seeds": "helper",
+      "factories": "lib",
+      "dto": "Docs"
+    },
+    "material-icon-theme.files.associations": {
+      "*.repository.ts": "Nest-gateway",
+      "*.entity.ts": "Nest-pipe",
+      "*.config.ts": "Settings",
+      "*.dto.ts": "Document",
+      "*.mail.ts": "Email",
+      "main.ts": "Nodejs"
+    },
+    "vitest.enable": true,
+    "vitest.include": [
+      "**/*.{test,spec,e2e-spec}.{ts,js,mjs,cjs,ts,mts,cts,jsx,tsx}"
+    ],
+    "vitest.commandLine": "vitest --",
+    "testing.automaticallyOpenPeekView": "never",
+    "javascript.suggest.autoImports": true,
+    "javascript.preferences.importModuleSpecifier": "relative",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "[javascript][typescript]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+      }
+    }
+  }
+  

@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "unifiedjs.vscode-mdx",
+    "humao.rest-client",
+    "kingwl.vscode-vitest-runner",
+    "vscode-icons-team.vscode-icons",
+    "voldemortensen.rainbow-tags",
+    "hediet.vscode-drawio",
+    "Angular.ng-template",
+    "zaaack.markdown-editor",
+    "esbenp.prettier-vscode",
+    "qwtel.sqlite-viewer"
+  ]
+}
