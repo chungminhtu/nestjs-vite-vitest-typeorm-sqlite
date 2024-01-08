@@ -10,11 +10,13 @@ export default class CreateProducts implements Seeder {
         id: 1,
         product_name: 'Apple',
         description: 'Test the apple',
+        stock: 3,
       } as Product,
       {
         id: 2,
         product_name: 'Onion',
         description: 'Test the onion',
+        stock: 5,
       } as Product,
     ];
 
