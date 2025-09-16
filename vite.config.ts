@@ -5,7 +5,8 @@ import { VitePluginNode } from 'vite-plugin-node';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ command, mode }) => {
-  const isTest = mode === "test";
+  const isTest = mode === "test" || mode === "e2e";
+  const isE2e = mode === "e2e";
   return {
     root: __dirname,
     server: {
@@ -16,7 +17,11 @@ export default defineConfig(({ command, mode }) => {
     test: {
       globals: true,
       environment: 'node',
-      exclude: ['node_modules', 'dist', 'frontend'],
+      testTimeout: isE2e ? 30000 : 10000,
+      hookTimeout: isE2e ? 30000 : 10000,
+      include: isE2e ? ['test/**/*e2e.spec.ts'] : ['test/**/*.spec.ts'],
+      exclude: ['node_modules', 'dist', 'frontend/**'],
+      setupFiles: isE2e ? ['./test/vitest-setup.ts'] : undefined,
     },
     build: {
       target: 'es2022',

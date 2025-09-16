@@ -49,7 +49,7 @@
     "**/.angular": true,
     "**/.docusaurus": true
   },
-  "editor.fontFamily": "'MonoLisa Trial','Cascadia Code','Cousine','Jetbrains Mono','Fira Code',Consolas, 'SF Mono', 'Courier New', monospace",
+  "editor.fontFamily": "'Google Sans Code','MonoLisa Trial','Cascadia Code','Cousine','Jetbrains Mono','Fira Code',Consolas, 'SF Mono', 'Courier New', monospace",
   "editor.fontLigatures": true,
   "js/ts.implicitProjectConfig.experimentalDecorators": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,

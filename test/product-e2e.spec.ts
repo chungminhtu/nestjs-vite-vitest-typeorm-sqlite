@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import request from 'supertest';
@@ -22,6 +22,14 @@ describe('ProductModule e2e', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        validationError: {
+          target: false,
+        },
+      }),
+    );
     await app.init();
   });
 
@@ -110,7 +118,7 @@ describe('ProductModule e2e', () => {
     expect(updateResponse.body.stock).toBe(updatedProduct.stock);
   });
 
-  it('should delete a product 200', async () => {
+  it('should delete a product 204', async () => {
     const newProduct = {
       product_name: 'Product to Delete',
       description: 'This product will be deleted',
@@ -126,7 +134,7 @@ describe('ProductModule e2e', () => {
 
     await request(app.getHttpServer())
       .delete(`/product/${productId}`)
-      .expect(200);
+      .expect(204);
 
     await request(app.getHttpServer())
       .get(`/product/${productId}`)
@@ -191,7 +199,7 @@ describe('ProductModule e2e', () => {
     expect(response.body).toHaveProperty('id');
     expect(response.body.product_name).toBe(minimalProduct.product_name);
     expect(response.body.description).toBe(minimalProduct.description);
-    expect(response.body.stock).toBeUndefined();
+    expect(response.body.stock).toBeNull();
   });
 
   it('should update only some fields of a product 200', async () => {

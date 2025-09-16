@@ -13,7 +13,7 @@
     "nest:build": "nest build",
     "nest:start:prod": "npm run nest:build && node ./dist/main.js",
     "nest:test": "vitest run",
-    "nest:test:e2e": "NODE_OPTIONS=--loader=ts-node/esm vitest run --config vitest.config.e2e.ts",
+    "nest:test:e2e": "NODE_OPTIONS=--loader=ts-node/esm vitest run --mode e2e",
     "nest:test:watch": "vitest",
     "frontend:dev": "cd frontend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
