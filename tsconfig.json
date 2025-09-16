@@ -17,12 +17,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
   },
   "exclude": [
     "node_modules",
     "test",
     "dist",
-    "**/*spec.ts"
+    "frontend"
   ]
 }

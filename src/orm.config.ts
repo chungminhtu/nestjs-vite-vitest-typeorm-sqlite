@@ -7,10 +7,10 @@ import CreateProducts from './modules/product/seed/product.seed';
 
 export const getDbConfig = (configService: ConfigService) => {
   return {
-    type: 'better-sqlite3',
+    type: 'sqlite',
     database: configService.get('sqlite.dbPath'),
     entities: [Product],
-    seeds: [CreateProducts],
+    seeds: process.env.NODE_ENV === 'test' ? [] : [CreateProducts], // Don't use seeds in test environment
     dropSchema: true,
     synchronize: true,
     migrationsRun: false,

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
@@ -27,7 +27,31 @@ export async function createApp(
       },
     }),
   );
+
+  // Swagger Configuration
+  const config = new DocumentBuilder()
+    .setTitle('Product Management API')
+    .setDescription('API for managing products with CRUD operations')
+    .setVersion('1.0')
+    .addTag('products', 'Product management endpoints')
+    .addServer('http://localhost:3000')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+    },
+    customCss: `
+      .swagger-ui .topbar { display: none }
+      .swagger-ui .info .title { color: #3b4151 }
+    `,
+    customSiteTitle: 'Product Management API Documentation',
+  });
+
   console.log(` 🚀 Server ready at: http://localhost:3000`);
+  console.log(` 📚 Swagger UI available at: http://localhost:3000/api`);
   return app;
 }
 

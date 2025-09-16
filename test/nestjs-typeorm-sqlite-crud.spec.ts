@@ -24,13 +24,13 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar' })
     name: string;
 
-    @Column()
+    @Column({ type: 'varchar' })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({ type: 'datetime', nullable: true })
     createDate: Date;
   }
 
@@ -104,7 +104,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
   @Module({
     imports: [
       TypeOrmModule.forRoot({
-        type: 'better-sqlite3',
+        type: 'sqlite',
         database: ':memory:',
         entities: [User],
         synchronize: true,

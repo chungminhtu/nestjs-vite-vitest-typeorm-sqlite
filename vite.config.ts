@@ -11,6 +11,12 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: 3000,
       host: 'localhost',
+      strictPort: true, // Don't automatically switch to another port
+    },
+    test: {
+      globals: true,
+      environment: 'node',
+      exclude: ['node_modules', 'dist', 'frontend'],
     },
     build: {
       target: 'es2022',
@@ -21,21 +27,30 @@ export default defineConfig(({ command, mode }) => {
         transformMixedEsModules: true,
         include: [/node_modules/],
       },
-    },
-    test: {
-      root: './',
-      globals: true,
-      testTimeout: 600000,
-      passWithNoTests: true,
-      include: ['**/*.e2e-test.ts', '**/*.spec.ts'],
-      // setupFiles: [resolve(__dirname, './test/vitest-setup.ts')],
-      environment: 'node',
+      rollupOptions: {
+        external: [
+          'sqlite3',
+          'reflect-metadata',
+          'buffer',
+          'events',
+          'fs',
+          'path',
+          'util',
+          'crypto',
+          'stream',
+          'http',
+          'https',
+          'url',
+          'querystring',
+          'zlib',
+        ],
+      },
     },
     esbuild: false,
     optimizeDeps: {
-      // Vite does not work well with optionnal dependencies,
+      // Vite does not work well with optional dependencies,
       // you can mark them as ignored for now
-      // eg: for nestjs, exlude these optional dependencies:
+      // eg: for nestjs, exclude these optional dependencies:
       exclude: [
         '@nestjs/core',
         '@nestjs/common',
@@ -45,8 +60,10 @@ export default defineConfig(({ command, mode }) => {
         '@nestjs/microservices',
         '@nestjs/websockets',
         'cache-manager',
-        // 'class-transformer',
-        // 'class-validator',
+        'class-transformer',
+        'class-validator',
+        'sqlite3',
+        'reflect-metadata',
         'fastify-swagger',
         '@nestjs/platform-socket.io',
         '@nestjs/websockets',
@@ -61,7 +78,6 @@ export default defineConfig(({ command, mode }) => {
         'kafkajs',
         'mock-aws-s3',
         '@apollo/subgraph',
-        'ts-morph',
         'apollo-server-express',
         '@apollo/gateway',
         'fsevents',

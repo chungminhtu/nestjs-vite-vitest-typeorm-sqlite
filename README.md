@@ -290,6 +290,37 @@ npm run dev:prod
 - `PATCH /product/:id` - Update product
 - `DELETE /product/:id` - Delete product
 
+## 📚 API Documentation
+
+### Swagger UI
+
+Interactive API documentation is available at: **http://localhost:3000/api**
+
+### Features:
+
+- **Interactive Testing**: Test all endpoints directly from the browser
+- **Request/Response Examples**: See sample data for all operations
+- **Schema Validation**: View detailed request/response schemas
+- **Authentication**: Support for API key authentication
+- **Request History**: Track your API calls
+
+### Accessing Swagger:
+
+```bash
+# Start the development server
+npm run nest:dev
+
+# Open Swagger UI in browser
+npm run swagger:open
+```
+
+### API Specification:
+
+- **OpenAPI 3.0** compliant
+- **JSON Schema** validation
+- **TypeScript** type definitions
+- **Real-time updates** during development
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -307,15 +338,17 @@ npm run dev:prod
 
 ## 📝 Scripts Overview
 
-| Command                      | Description                     |
-| ---------------------------- | ------------------------------- |
-| `npm start`                  | Start development environment   |
-| `npm run dev`                | Same as npm start               |
-| `npm run build`              | Build for production            |
-| `npm run test:all`           | Run all tests                   |
-| `npm run e2e:backend`        | Backend e2e tests only          |
-| `npm run e2e:frontend:no-ui` | Frontend e2e tests (headless)   |
-| `npm run e2e:full:no-ui`     | Full stack e2e tests (headless) |
+| Command                      | Description                         |
+| ---------------------------- | ----------------------------------- |
+| `npm start`                  | Start development environment       |
+| `npm run dev`                | Same as npm start                   |
+| `npm run nest:dev`           | Start NestJS with Vite (hot reload) |
+| `npm run build`              | Build for production                |
+| `npm run test:all`           | Run all tests                       |
+| `npm run e2e:backend`        | Backend e2e tests only              |
+| `npm run e2e:frontend:no-ui` | Frontend e2e tests (headless)       |
+| `npm run e2e:full:no-ui`     | Full stack e2e tests (headless)     |
+| `npm run swagger:open`       | Open Swagger UI in browser          |
 
 ## 🤝 Contributing
 

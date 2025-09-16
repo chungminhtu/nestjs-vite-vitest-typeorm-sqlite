@@ -33,10 +33,10 @@ describe('Import E2E', () => {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar' })
     name: string;
 
-    @Column()
+    @Column({ type: 'varchar' })
     value: string;
   }
 
@@ -110,7 +110,7 @@ describe('Import E2E', () => {
   @Module({
     imports: [
       TypeOrmModule.forRoot({
-        type: 'better-sqlite3',
+        type: 'sqlite',
         database: ':memory:',
         dropSchema: true,
         synchronize: true,

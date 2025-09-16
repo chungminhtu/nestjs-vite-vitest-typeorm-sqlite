@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import request from 'supertest';
+import { Product } from '../src/modules/product/entities/product.entity';
 import { ProductModule } from '../src/modules/product/product.module';
 
 describe('ProductModule e2e', () => {
@@ -11,9 +12,9 @@ describe('ProductModule e2e', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
-          type: 'better-sqlite3',
+          type: 'sqlite',
           database: ':memory:',
-          entities: ['src/modules/product/entities/*.entity{.ts,.js}'],
+          entities: [Product],
           synchronize: true,
         }),
         ProductModule,
@@ -25,7 +26,7 @@ describe('ProductModule e2e', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await app?.close();
   });
 
   it('should create a new product 201', async () => {
