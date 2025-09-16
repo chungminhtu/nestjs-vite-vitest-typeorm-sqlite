@@ -5,10 +5,34 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nodemon --exec \"vite build && node ./dist/main.js\" -e ts --ignore dist/",
+    "dev": "concurrently \"npm run nest:dev\" \"npm run frontend:dev\"",
     "vitest": "vitest",
     "nest:start": "nest start",
+    "nest:dev": "vite",
+    "nest:dev:watch": "vite --mode development",
     "nest:build": "nest build",
+    "nest:start:prod": "npm run nest:build && node ./dist/main.js",
+    "nest:test": "vitest run",
+    "nest:test:e2e": "vitest run --config vitest.config.e2e.ts",
+    "nest:test:watch": "vitest",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:preview": "cd frontend && npm run preview",
+    "dev:prod": "concurrently \"npm run nest:start:prod\" \"npm run frontend:preview\"",
+    "start": "npm run dev",
+    "e2e:backend": "npm run nest:test:e2e",
+    "e2e:frontend:ui": "cd frontend && npm run test:e2e:ui",
+    "e2e:frontend:no-ui": "cd frontend && npm run test:e2e:no-ui",
+    "e2e:frontend:headed": "cd frontend && npm run test:e2e:headed",
+    "e2e:frontend:debug": "cd frontend && npm run test:e2e:debug",
+    "e2e:full:ui": "concurrently \"npm run nest:start\" \"npm run frontend:dev\" \"wait-on http://localhost:3000 && cd frontend && npm run test:e2e:ui\"",
+    "e2e:full:no-ui": "concurrently \"npm run nest:start\" \"npm run frontend:dev\" \"wait-on http://localhost:3000 && cd frontend && npm run test:e2e:no-ui\"",
+    "test:all": "npm run e2e:backend && npm run e2e:full:no-ui",
+    "test:all:ui": "npm run e2e:backend && npm run e2e:full:ui",
+    "test:runner": "node test-runner.js",
+    "build": "npm run nest:build && npm run frontend:build",
+    "install:all": "npm install && cd frontend && npm install",
+    "clean": "rimraf node_modules dist && cd frontend && rimraf node_modules dist",
     "pnpm-install": "pnpm i",
     "clean-install": "npm i -g rimraf && rimraf node_modules && pnpm i && pnpm i"
   },
@@ -45,6 +69,7 @@
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20",
     "typeorm-extension": "^3.6.1",
     "typeorm-naming-strategies": "^4.1.0",
@@ -68,6 +93,7 @@
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/ui": "^2.0.5",
     "autocannon": "^7.15.0",
+    "concurrently": "^8.2.2",
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -84,7 +110,8 @@
     "ts-node": "^10.9.2",
     "ts-patch": "^3.2.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wait-on": "^7.2.0"
   },
   "resolutions": {
     "vitest": "$vitest",
@@ -101,6 +128,17 @@
       "glob": "*",
       "rimraf": "*",
       "inflight": "*"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@nestjs/core",
+      "bcrypt",
+      "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "better-sqlite3",
+      "redis-memory-server",
+      "sqlite3"
+    ]
   }
 }

@@ -135,7 +135,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     await app.close();
   });
 
-  it('should create a new user (200 OK)', async () => {
+  it('should create a new user 200 OK', async () => {
     const newUser = { name: 'John Doe', email: 'john@example.com' };
     const response = await request(app.getHttpServer())
       .post('/users')
@@ -147,7 +147,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     expect(response.body.email).toBe(newUser.email);
   });
 
-  it('should get all users (200 OK)', async () => {
+  it('should get all users 200 OK', async () => {
     const response = await request(app.getHttpServer())
       .get('/users')
       .expect(200);
@@ -155,7 +155,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('should get a specific user (200 OK)', async () => {
+  it('should get a specific user 200 OK', async () => {
     const newUser = { name: 'Jane Doe', email: 'jane@example.com' };
     const createResponse = await request(app.getHttpServer())
       .post('/users')
@@ -173,7 +173,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     expect(getResponse.body.email).toBe(newUser.email);
   });
 
-  it('should update a user (200 OK)', async () => {
+  it('should update a user 200 OK', async () => {
     const newUser = { name: 'Bob Smith', email: 'bob@example.com' };
     const createResponse = await request(app.getHttpServer())
       .post('/users')
@@ -193,7 +193,7 @@ describe('nestjs-typeorm-sqlite-crud.spec e2e', () => {
     expect(updateResponse.body.email).toBe(updatedUser.email);
   });
 
-  it('should delete a user (200 OK)', async () => {
+  it('should delete a user 200 OK', async () => {
     const newUser = { name: 'Alice Johnson', email: 'alice@example.com' };
     const createResponse = await request(app.getHttpServer())
       .post('/users')

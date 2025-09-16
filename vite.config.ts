@@ -9,7 +9,8 @@ export default defineConfig(({ command, mode }) => {
   return {
     root: __dirname,
     server: {
-      port: 3002,
+      port: 3000,
+      host: 'localhost',
     },
     build: {
       target: 'es2022',

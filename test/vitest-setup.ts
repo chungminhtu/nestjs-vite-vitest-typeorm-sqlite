@@ -16,6 +16,9 @@ export let request: any;
 export let dataSource: DataSource;
 export let moduleFixture: TestingModule;
 
+// Set test environment for proper database configuration
+process.env.NODE_ENV = 'test';
+
 beforeAll(async () => {
   moduleFixture = await Test.createTestingModule({
     imports: [

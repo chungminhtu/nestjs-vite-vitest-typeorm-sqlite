@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { AppModule } from './app.module';
@@ -25,13 +27,13 @@ export async function createApp(
       },
     }),
   );
-  console.log(` 🚀 Server ready at: http://localhost:3001`);
+  console.log(` 🚀 Server ready at: http://localhost:3000`);
   return app;
 }
 
 async function main() {
   const app = await createApp();
-  await app.listen(3001, () => {});
+  await app.listen(3000, () => {});
   await setupDB(app);
 }
 
