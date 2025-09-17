@@ -4,19 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:no-ui": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report",
+    "dev:frontend": "vite",
+    "build:frontend": "tsc -b && vite build",
+    "test:frontend:e2e": "playwright test",
+    "test:frontend:e2e:ui": "playwright test --ui",
+    "test:frontend:e2e:headed": "playwright test --headed",
+    "test:frontend:e2e:debug": "playwright test --debug",
+    "test:frontend:e2e:report": "playwright show-report",
     "playwright:install": "playwright install",
-    "playwright:install-deps": "playwright install-deps",
-    "playwright:codegen": "playwright codegen http://localhost:5173"
+    "playwright:codegen": "playwright codegen http://localhost:5173",
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "^19.1.1",

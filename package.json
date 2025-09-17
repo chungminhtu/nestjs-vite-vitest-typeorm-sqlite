@@ -4,8 +4,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "vite",
-    "test:e2e": "vitest run",
+    "dev:backend": "vite",
+    "test:backend:e2e": "vitest run",
     "install:all": "pnpm i && cd frontend && pnpm i",
     "kill:port": "npx kill-port-process 3000 && npx kill-port-process 5173"
   },

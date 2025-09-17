@@ -65,12 +65,12 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'cd .. && npm run nest:dev',
+      command: 'cd .. && npm run dev:backend',
       url: 'http://localhost:3000',
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'npm run dev',
+      command: 'npm run dev:frontend',
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
     },
