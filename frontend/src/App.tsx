@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { ProductForm } from './components/ProductForm';
 import { ProductList } from './components/ProductList';
-import { apiService } from './services/api';
+import { microservicesService } from './services/microservices.service';
 import type { CreateProductDto, Product, UpdateProductDto } from './types/Product';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
   const loadProducts = async () => {
     try {
       setIsLoading(true);
-      const fetchedProducts = await apiService.getProducts();
+      const fetchedProducts = await microservicesService.getProducts();
       setProducts(fetchedProducts);
       setError('');
     } catch (err) {
@@ -32,7 +32,7 @@ function App() {
   const handleCreateProduct = async (productData: CreateProductDto | UpdateProductDto) => {
     try {
       setIsLoading(true);
-      await apiService.createProduct(productData as CreateProductDto);
+      await microservicesService.createProduct(productData as CreateProductDto);
       await loadProducts();
       setError('');
     } catch (err) {
@@ -48,7 +48,7 @@ function App() {
 
     try {
       setIsLoading(true);
-      await apiService.updateProduct(editingProduct.id, productData);
+      await microservicesService.updateProduct(editingProduct.id, productData);
       await loadProducts();
       setEditingProduct(null);
       setError('');
@@ -65,7 +65,7 @@ function App() {
 
     try {
       setIsLoading(true);
-      await apiService.deleteProduct(id);
+      await microservicesService.deleteProduct(id);
       await loadProducts();
       setError('');
     } catch (err) {

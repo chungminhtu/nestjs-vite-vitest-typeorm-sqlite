@@ -42,3 +42,4 @@ lerna-debug.log*
 .aider*
 test-results/
 playwright-report/
+backend2/node_modules/

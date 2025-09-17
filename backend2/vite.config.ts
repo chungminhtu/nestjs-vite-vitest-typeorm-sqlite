@@ -9,7 +9,7 @@ export default defineConfig(({ command, mode }) => {
   return {
     root: __dirname,
     server: {
-      port: 3000,
+      port: 3001,
       host: 'localhost',
       strictPort: true,
     },
@@ -21,12 +21,6 @@ export default defineConfig(({ command, mode }) => {
       include: ['test/**/*e2e.spec.ts', 'test/**/*.spec.ts'],
       exclude: ['node_modules', 'dist', 'frontend/**'],
       setupFiles: './test/vitest-setup.ts',
-      // Run tests sequentially to avoid conflicts
-      threads: false,
-      maxThreads: 1,
-      minThreads: 1,
-      // Ensure proper isolation
-      isolate: true,
     },
     build: {
       target: 'es2022',

@@ -1,13 +1,11 @@
 {
-  "name": "application",
+  "name": "backend2",
   "version": "1.0.0",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev:backend": "vite",
+    "dev:backend2": "vite",
     "test:backend:e2e": "vitest run",
-    "test:microservices": "node test-microservices.js",
-    "test:microservices:vitest": "vitest run test/live-microservices.spec.ts",
     "install:all": "pnpm i && cd frontend && pnpm i",
     "kill:port": "npx kill-port-process 3000 && npx kill-port-process 5173"
   },
@@ -19,13 +17,13 @@
     "@nestjs/core": "^11.1.6",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "^2.1.0",
-    "@nestjs/microservices": "^11.1.6",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.6",
     "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/microservices": "^11.1.6",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@paralleldrive/cuid2": "^2.2.2",
     "@swc/core": "^1.13.5",
@@ -40,7 +38,6 @@
     "ioredis": "^5.7.0",
     "json2csv": "6.0.0-alpha.2",
     "multer": "2.0.2",
-    "node-fetch": "^3.3.2",
     "passport-local": "^1.0.0",
     "redis": "^5.8.2",
     "reflect-metadata": "^0.2.2",
@@ -58,7 +55,6 @@
     "@nestjs/cli": "^11.0.10",
     "@nestjs/schematics": "^11.0.7",
     "@nestjs/testing": "^11.1.6",
-    "@playwright/test": "^1.55.0",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/multer": "^2.0.0",
@@ -88,7 +84,8 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2",
     "vitest": "3.2.4",
-    "wait-on": "^9.0.0"
+    "wait-on": "^9.0.0",
+    "@playwright/test": "^1.55.0"
   },
   "resolutions": {
     "vitest": "$vitest",

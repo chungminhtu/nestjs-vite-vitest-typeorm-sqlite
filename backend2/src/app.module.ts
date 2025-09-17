@@ -3,11 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RedisService } from './common/services/redis.service';
 import configuration from './configuration';
-import { Product } from './modules/product/entities/product.entity';
-import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
 import { getDbConfig } from './orm.config';
+// removed ClientsModule here; provided in OrderModule
 
 @Module({
   imports: [
@@ -21,10 +20,9 @@ import { getDbConfig } from './orm.config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => getDbConfig(configService),
     }),
-    TypeOrmModule.forFeature([Product]),
-    ProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RedisService],
+  providers: [AppService],
 })
 export class AppModule {}

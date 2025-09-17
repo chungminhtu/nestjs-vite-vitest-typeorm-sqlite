@@ -11,13 +11,14 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { AppModule } from './app.module';
-import { RedisService } from './common/services/redis.service';
 import { getDbConfig } from './orm.config';
+
+export const viteNodeApp = NestFactory.create(AppModule);
 
 export async function createApp(
   options?: NestApplicationOptions,
 ): Promise<INestApplication> {
-  const app = await NestFactory.create(AppModule, options);
+  const app = await viteNodeApp;
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -29,12 +30,13 @@ export async function createApp(
   );
 
   // Swagger Configuration
+  const port = process.env.PORT || 3001;
   const config = new DocumentBuilder()
-    .setTitle('Product Management API')
-    .setDescription('API for managing products with CRUD operations')
+    .setTitle('Order Management API')
+    .setDescription('API for managing orders with CRUD operations')
     .setVersion('1.0')
-    .addTag('products', 'Product management endpoints')
-    .addServer('http://localhost:3000')
+    .addTag('orders', 'Order management endpoints')
+    .addServer(`http://localhost:${port}`)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -47,42 +49,37 @@ export async function createApp(
       .swagger-ui .topbar { display: none }
       .swagger-ui .info .title { color: #3b4151 }
     `,
-    customSiteTitle: 'Product Management API Documentation',
+    customSiteTitle: 'Order Management API',
   });
 
-  console.log(` 🚀 Server ready at: http://localhost:3000`);
-  console.log(` 📚 Swagger UI available at: http://localhost:3000/api`);
+  console.log(` 🚀 Server ready at: http://localhost:${port}`);
+  console.log(` 📚 Swagger UI available at: http://localhost:${port}/api`);
   return app;
 }
 
 async function main() {
   const app = await createApp();
-
+  const port = process.env.PORT || 3001;
   try {
-    // Start Redis Memory Server first
-    const redisService = app.get(RedisService);
-    await new Promise(resolve => setTimeout(resolve, 8000));
-
-    const redisConfig = redisService.getRedisConfig();
-    console.log('🔗 Connecting to Redis at:', redisConfig);
-
-    // Connect to Redis for microservice communication
+    const configService = app.get(ConfigService);
+    const host = configService.get<string>('redis.host') ?? '127.0.0.1';
+    const rport = configService.get<number>('redis.port') ?? 6379;
+    console.log('🔗 Backend2 connecting to Redis at:', { host, port: rport });
     app.connectMicroservice({
       transport: Transport.REDIS,
       options: {
-        ...redisConfig,
+        host,
+        port: rport,
         retryAttempts: 5,
         retryDelay: 3000,
       },
     });
-
     await app.startAllMicroservices();
-    console.log('✅ Microservices started successfully');
-  } catch (error) {
-    console.log('⚠️ Redis connection failed, starting without microservices:', error.message);
+    console.log('✅ Backend2 microservices started successfully');
+  } catch (e) {
+    console.log('⚠️ Backend2 Redis connection failed:', e.message);
   }
-
-  await app.listen(3000, () => {});
+  await app.listen(port, () => {});
   await setupDB(app);
 }
 
