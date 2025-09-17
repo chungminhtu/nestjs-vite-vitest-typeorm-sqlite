@@ -6,22 +6,21 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ command, mode }) => {
   const isTest = mode === "test" || mode === "e2e";
-  const isE2e = mode === "e2e";
   return {
     root: __dirname,
     server: {
       port: 3000,
       host: 'localhost',
-      strictPort: true, // Don't automatically switch to another port
+      strictPort: true,
     },
     test: {
       globals: true,
       environment: 'node',
-      testTimeout: isE2e ? 30000 : 10000,
-      hookTimeout: isE2e ? 30000 : 10000,
-      include: isE2e ? ['test/**/*e2e.spec.ts'] : ['test/**/*.spec.ts'],
+      testTimeout: 30000,
+      hookTimeout: 30000,
+      include: ['test/**/*e2e.spec.ts', 'test/**/*.spec.ts'],
       exclude: ['node_modules', 'dist', 'frontend/**'],
-      setupFiles: isE2e ? ['./test/vitest-setup.ts'] : undefined,
+      setupFiles: './test/vitest-setup.ts',
     },
     build: {
       target: 'es2022',

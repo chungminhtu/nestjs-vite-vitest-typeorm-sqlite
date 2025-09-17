@@ -44,7 +44,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Promise.all([app?.close(), dataSource?.destroy()]);
+  await Promise.allSettled([app?.close(), dataSource?.destroy()]);
 });
 
 console.clear();

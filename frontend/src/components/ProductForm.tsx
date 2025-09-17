@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Product, CreateProductDto, UpdateProductDto } from '../types/Product';
+import { useEffect, useState } from 'react';
+import { CreateProductDto, Product, UpdateProductDto } from '../types/Product';
 
 interface ProductFormProps {
   product?: Product;
@@ -89,6 +89,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
             onChange={handleChange}
             className={errors.product_name ? 'error' : ''}
             disabled={isLoading}
+            data-testid="product-name-input"
           />
           {errors.product_name && <span className="error-message">{errors.product_name}</span>}
         </div>
@@ -103,6 +104,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
             className={errors.description ? 'error' : ''}
             disabled={isLoading}
             rows={3}
+            data-testid="product-description-input"
           />
           {errors.description && <span className="error-message">{errors.description}</span>}
         </div>
@@ -118,6 +120,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
             className={errors.stock ? 'error' : ''}
             disabled={isLoading}
             min="0"
+            data-testid="product-stock-input"
           />
           {errors.stock && <span className="error-message">{errors.stock}</span>}
         </div>
@@ -126,7 +129,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
           <button type="button" onClick={onCancel} disabled={isLoading}>
             Cancel
           </button>
-          <button type="submit" disabled={isLoading}>
+          <button type="submit" disabled={isLoading} data-testid="create-product-btn">
             {isLoading ? 'Saving...' : (product ? 'Update Product' : 'Add Product')}
           </button>
         </div>

@@ -17,11 +17,11 @@ export const ProductList = ({ products, onEdit, onDelete, isLoading }: ProductLi
   }
 
   return (
-    <div className="product-list">
+    <div className="product-list" data-testid="product-list">
       <h3>Product List</h3>
       <div className="product-grid">
         {products.map((product) => (
-          <div key={product.id} className="product-card">
+          <div key={product.id} className="product-card" data-testid="product-item">
             <div className="product-header">
               <h4>{product.product_name}</h4>
               <div className="product-actions">
@@ -29,6 +29,7 @@ export const ProductList = ({ products, onEdit, onDelete, isLoading }: ProductLi
                   onClick={() => onEdit(product)}
                   className="edit-btn"
                   title="Edit product"
+                  data-testid="edit-product-btn"
                 >
                   ✏️
                 </button>
@@ -36,6 +37,7 @@ export const ProductList = ({ products, onEdit, onDelete, isLoading }: ProductLi
                   onClick={() => onDelete(product.id)}
                   className="delete-btn"
                   title="Delete product"
+                  data-testid="delete-product-btn"
                 >
                   🗑️
                 </button>

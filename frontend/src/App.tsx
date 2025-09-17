@@ -1,35 +1,119 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import { ProductForm } from './components/ProductForm';
+import { ProductList } from './components/ProductList';
+import { apiService } from './services/api';
+import { CreateProductDto, Product, UpdateProductDto } from './types/Product';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [error, setError] = useState<string>('');
+
+  const loadProducts = async () => {
+    try {
+      setIsLoading(true);
+      const fetchedProducts = await apiService.getProducts();
+      setProducts(fetchedProducts);
+      setError('');
+    } catch (err) {
+      setError('Failed to load products');
+      console.error('Error loading products:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const handleCreateProduct = async (productData: CreateProductDto) => {
+    try {
+      setIsLoading(true);
+      await apiService.createProduct(productData);
+      await loadProducts();
+      setError('');
+    } catch (err) {
+      setError('Failed to create product');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateProduct = async (productData: UpdateProductDto) => {
+    if (!editingProduct) return;
+
+    try {
+      setIsLoading(true);
+      await apiService.updateProduct(editingProduct.id, productData);
+      await loadProducts();
+      setEditingProduct(null);
+      setError('');
+    } catch (err) {
+      setError('Failed to update product');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    try {
+      setIsLoading(true);
+      await apiService.deleteProduct(id);
+      await loadProducts();
+      setError('');
+    } catch (err) {
+      setError('Failed to delete product');
+      console.error('Error deleting product:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProduct(null);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <header>
+        <h1>Product Management</h1>
+        {error && <div className="error-banner" data-testid="error-message">{error}</div>}
+      </header>
+
+      <main>
+        <div className="container">
+          <section className="form-section">
+            <ProductForm
+              product={editingProduct || undefined}
+              onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct}
+              onCancel={handleCancelEdit}
+              isLoading={isLoading}
+            />
+          </section>
+
+          <section className="list-section">
+            <ProductList
+              products={products}
+              onEdit={handleEditProduct}
+              onDelete={handleDeleteProduct}
+              isLoading={isLoading}
+            />
+          </section>
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;

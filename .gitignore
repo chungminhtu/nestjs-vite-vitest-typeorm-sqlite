@@ -40,3 +40,5 @@ lerna-debug.log*
 **/*.db-journal
 **/*.sqlite
 .aider*
+test-results/
+playwright-report/
