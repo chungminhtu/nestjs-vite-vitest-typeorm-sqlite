@@ -116,7 +116,7 @@ export default defineConfig(({ command, mode }) => {
         appPath: './src/main.ts',
         exportName: 'viteNodeApp',
         tsCompiler: 'swc',
-        initAppOnBoot: !isTest, // Turn off initAppOnBoot when in test mode
+        initAppOnBoot: false, // Always disable initAppOnBoot
       }),
     ],
   };

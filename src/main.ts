@@ -86,6 +86,9 @@ async function main() {
   await setupDB(app);
 }
 
+// Export for Vite plugin
+export const viteNodeApp = createApp;
+
 main();
 async function setupDB(app: INestApplication) {
   const configService = app.get(ConfigService);

@@ -95,6 +95,9 @@ async function main(options?: { redisPort?: number }) {
   await setupDB(app);
 }
 
+// Export for Vite plugin
+export const viteNodeApp = createApp;
+
 if (process.env.NODE_ENV !== 'test') {
   // Avoid auto-starting in tests
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
