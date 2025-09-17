@@ -12,7 +12,7 @@ export default () => ({
   redis: {
     use_mock_redis: process.env.USE_MOCK_REDIS !== 'false',
     host: process.env.REDIS_HOST || '127.0.0.1',
-    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+    port: parseInt(process.env.REDIS_PORT, 10) || 6380, // Use 6380 for tests to avoid conflicts
   },
   max_jobs_number: process.env.MAX_JOBS_NUMBER,
 });

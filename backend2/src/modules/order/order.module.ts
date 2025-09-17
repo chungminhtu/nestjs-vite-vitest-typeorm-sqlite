@@ -18,7 +18,9 @@ import { OrderService } from './order.service';
           transport: Transport.REDIS,
           options: {
             host: configService.get<string>('redis.host') ?? '127.0.0.1',
-            port: configService.get<number>('redis.port') ?? 6379,
+            port: configService.get<number>('redis.port') ?? 6380, // Use 6380 for tests
+            retryAttempts: 10,
+            retryDelay: 2000,
           },
         }),
       },

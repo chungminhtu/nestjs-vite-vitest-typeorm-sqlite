@@ -1,10 +1,8 @@
-import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
 import insertDataWithPrimaryKeyId from '../../../orm.config';
 import { Product } from '../entities/product.entity';
 
-export default class CreateProducts implements Seeder {
-  public async run(dataSource: DataSource): Promise<void> {
+export default class CreateProducts {
+  public async run(dataSource: any): Promise<any> {
     const products = [
       {
         id: 1,

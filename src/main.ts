@@ -71,8 +71,8 @@ async function main() {
       transport: Transport.REDIS,
       options: {
         ...redisConfig,
-        retryAttempts: 5,
-        retryDelay: 3000,
+        retryAttempts: 10,
+        retryDelay: 2000,
       },
     });
 
@@ -92,5 +92,5 @@ async function setupDB(app: INestApplication) {
   const dbConfig = getDbConfig(configService);
   const dataSource = new DataSource(dbConfig);
   await dataSource.initialize();
-  await runSeeders(dataSource);
+  await (runSeeders as any)(dataSource);
 }

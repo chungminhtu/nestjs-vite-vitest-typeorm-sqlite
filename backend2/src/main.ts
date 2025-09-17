@@ -13,12 +13,10 @@ import { runSeeders } from 'typeorm-extension';
 import { AppModule } from './app.module';
 import { getDbConfig } from './orm.config';
 
-export const viteNodeApp = NestFactory.create(AppModule);
-
 export async function createApp(
   options?: NestApplicationOptions,
 ): Promise<INestApplication> {
-  const app = await viteNodeApp;
+  const app = await NestFactory.create(AppModule, options);
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -60,30 +58,41 @@ export async function createApp(
 async function main() {
   const app = await createApp();
   const port = process.env.PORT || 3001;
-  try {
-    const configService = app.get(ConfigService);
-    const host = configService.get<string>('redis.host') ?? '127.0.0.1';
-    const rport = configService.get<number>('redis.port') ?? 6379;
-    console.log('🔗 Backend2 connecting to Redis at:', { host, port: rport });
-    app.connectMicroservice({
-      transport: Transport.REDIS,
-      options: {
-        host,
-        port: rport,
-        retryAttempts: 5,
-        retryDelay: 3000,
-      },
-    });
-    await app.startAllMicroservices();
-    console.log('✅ Backend2 microservices started successfully');
-  } catch (e) {
-    console.log('⚠️ Backend2 Redis connection failed:', e.message);
+  if (process.env.SKIP_MS !== 'true') {
+    try {
+      const configService = app.get(ConfigService);
+      const host = configService.get<string>('redis.host') ?? '127.0.0.1';
+      const rport = parseInt(process.env.REDIS_PORT || '6380', 10);
+      console.log('🔗 Backend2 connecting to Redis at:', { host, port: rport });
+      app.connectMicroservice({
+        transport: Transport.REDIS,
+        options: {
+          host,
+          port: rport,
+          retryAttempts: 10,
+          retryDelay: 500,
+        },
+      });
+      await app.startAllMicroservices();
+      console.log('✅ Backend2 microservices started successfully');
+    } catch (e) {
+      console.log('⚠️ Backend2 Redis connection failed:', (e as any)?.message);
+    }
   }
-  await app.listen(port, () => {});
+  // Prevent double listen in tests
+  try {
+    await app.listen(port, () => {
+      console.log(`🚀 Backend2 listening on port ${port}`);
+    });
+  } catch {}
   await setupDB(app);
 }
 
-main();
+if (process.env.NODE_ENV !== 'test') {
+  // Avoid auto-starting in tests
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  main();
+}
 async function setupDB(app: INestApplication) {
   const configService = app.get(ConfigService);
   const dbConfig = getDbConfig(configService);

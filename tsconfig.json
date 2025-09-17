@@ -18,6 +18,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "skipDefaultLibCheck": true,
     "types": [
       "node",
       "vitest/globals"

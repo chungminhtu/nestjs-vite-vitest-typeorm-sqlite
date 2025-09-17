@@ -2,7 +2,8 @@ import { PartialType } from '@nestjs/mapped-types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateProductDto } from './create-product.dto';
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {
+export class UpdateProductDto extends (PartialType(CreateProductDto) as any) {
+  [key: string]: any;
   @ApiPropertyOptional({
     description: 'The name of the product (optional for updates)',
     example: 'iPhone 15 Pro Max',

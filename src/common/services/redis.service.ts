@@ -16,19 +16,21 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     if (useMockRedis) {
       console.log('🚀 Starting Redis Memory Server...');
+      // Use random port for isolation
       this.redisServer = new RedisMemoryServer();
 
       try {
+        // Start the Redis server explicitly
+        await this.redisServer.start();
         this.redisPort = await this.redisServer.getPort();
         const host = await this.redisServer.getHost();
         console.log(`📡 Redis Memory Server running at ${host}:${this.redisPort}`);
 
         // Wait for the server to be ready
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
       } catch (error) {
         console.error('Failed to start Redis Memory Server:', error);
-        // Fallback to configured/default port
-        this.redisPort = this.configService.get<number>('redis.port');
+        this.redisPort = undefined as any;
       }
     } else {
       console.log('🔧 Using external Redis, not starting Redis Memory Server');
@@ -43,6 +45,8 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
+  // No port-killing in test mode; each run uses isolated random port
+
   getRedisConfig() {
     const useMockRedis = this.configService.get<boolean>('redis.use_mock_redis');
 
@@ -54,10 +58,12 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       };
     }
 
-    console.log(`🔧 Using external Redis port: ${this.configService.get<number>('redis.port')}`);
+    // In test mode, use the configured test port
+    const testPort = this.configService.get<number>('redis.port') || 6379;
+    console.log(`🔧 Using Redis port: ${testPort}`);
     return {
-      host: this.configService.get<string>('redis.host'),
-      port: this.configService.get<number>('redis.port'),
+      host: this.configService.get<string>('redis.host') || '127.0.0.1',
+      port: testPort,
     };
   }
 }

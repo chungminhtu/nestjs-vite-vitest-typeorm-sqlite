@@ -6,10 +6,9 @@
   "scripts": {
     "dev:backend": "vite",
     "test:backend:e2e": "vitest run",
-    "test:microservices": "node test-microservices.js",
+    "test:microservices": "vitest run test/microservices.e2e.spec.ts --no-coverage",
     "test:microservices:vitest": "vitest run test/live-microservices.spec.ts",
-    "install:all": "pnpm i && cd frontend && pnpm i",
-    "kill:port": "npx kill-port-process 3000 && npx kill-port-process 5173"
+    "install:all": "pnpm i && cd frontend && pnpm i"
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
@@ -74,8 +73,6 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.1.3",
-    "kill-port-process": "^3.2.1",
-    "pid-from-port": "^1.1.3",
     "prettier": "^3.6.2",
     "ps-list": "^8.1.1",
     "redis-memory-server": "^0.13.0",

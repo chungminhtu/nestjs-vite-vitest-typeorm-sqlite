@@ -22,9 +22,12 @@ export default defineConfig(({ command, mode }) => {
       exclude: ['node_modules', 'dist', 'frontend/**'],
       setupFiles: './test/vitest-setup.ts',
       // Run tests sequentially to avoid conflicts
-      threads: false,
-      maxThreads: 1,
-      minThreads: 1,
+      pool: 'threads',
+      poolOptions: {
+        threads: {
+          singleThread: true,
+        },
+      },
       // Ensure proper isolation
       isolate: true,
     },
