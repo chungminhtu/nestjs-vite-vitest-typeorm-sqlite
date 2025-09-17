@@ -35,7 +35,7 @@ test.describe('Product Management', () => {
   test('should update a product', async ({ page }) => {
     const updatedName = `Updated Product ${Date.now()}`;
 
-    await page.click('[data-testid="edit-product-btn"]').first();
+    await page.locator('[data-testid="edit-product-btn"]').first().click();
     await page.fill('[data-testid="product-name-input"]', updatedName);
     await page.click('[data-testid="update-product-btn"]');
 
@@ -45,7 +45,7 @@ test.describe('Product Management', () => {
   test('should delete a product', async ({ page }) => {
     const initialCount = await page.locator('[data-testid="product-item"]').count();
 
-    await page.click('[data-testid="delete-product-btn"]').first();
+    await page.locator('[data-testid="delete-product-btn"]').first().click();
 
     await page.waitForTimeout(1000);
     const finalCount = await page.locator('[data-testid="product-item"]').count();

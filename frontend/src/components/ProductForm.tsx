@@ -61,6 +61,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
 
     try {
       await onSubmit(submitData);
+      setFormData({ product_name: '', description: '', stock: '' });
     } catch (error) {
       console.error('Failed to submit product:', error);
     }
@@ -78,6 +79,11 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
   return (
     <div className="product-form">
       <h3>{product ? 'Edit Product' : 'Add New Product'}</h3>
+      {Object.keys(errors).length > 0 && (
+        <div className="error-message" data-testid="error-message">
+          {Object.values(errors).join(', ')}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="product_name">Product Name *</label>
@@ -129,7 +135,7 @@ export const ProductForm = ({ product, onSubmit, onCancel, isLoading }: ProductF
           <button type="button" onClick={onCancel} disabled={isLoading}>
             Cancel
           </button>
-          <button type="submit" disabled={isLoading} data-testid="create-product-btn">
+          <button type="submit" disabled={isLoading} data-testid={product ? "update-product-btn" : "create-product-btn"}>
             {isLoading ? 'Saving...' : (product ? 'Update Product' : 'Add Product')}
           </button>
         </div>
