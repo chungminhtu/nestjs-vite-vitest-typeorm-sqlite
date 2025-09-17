@@ -9,6 +9,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   constructor(private configService: ConfigService) {}
 
+  // Allow setting dynamic Redis port (useful for e2e tests)
+  setRedisPort(port: number) {
+    this.redisPort = port;
+  }
+
   async onModuleInit() {
     console.log('🔧 RedisService onModuleInit called');
     const useMockRedis = this.configService.get<boolean>('redis.use_mock_redis');
@@ -34,7 +39,18 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       }
     } else {
       console.log('🔧 Using external Redis, not starting Redis Memory Server');
-      this.redisPort = this.configService.get<number>('redis.port');
+
+      // Always check environment first, then fall back to existing value or config
+      const envPort = process.env.REDIS_PORT;
+      if (envPort) {
+        this.redisPort = parseInt(envPort, 10);
+        console.log(`🔧 Redis port set from env: ${this.redisPort}`);
+      } else if (this.redisPort === undefined) {
+        this.redisPort = this.configService.get<number>('redis.port');
+        console.log(`🔧 Redis port set from config: ${this.redisPort}`);
+      } else {
+        console.log(`🔧 Redis port already set to: ${this.redisPort}, keeping existing value`);
+      }
     }
   }
 
@@ -50,6 +66,15 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   getRedisConfig() {
     const useMockRedis = this.configService.get<boolean>('redis.use_mock_redis');
 
+    // If a Redis port has been explicitly set (e.g., from e2e tests), use it
+    if (this.redisPort && !useMockRedis) {
+      console.log(`🔧 Using explicitly set Redis port: ${this.redisPort}`);
+      return {
+        host: this.configService.get<string>('redis.host') || '127.0.0.1',
+        port: this.redisPort,
+      };
+    }
+
     if (useMockRedis && this.redisServer && this.redisPort) {
       console.log(`🔧 Using Redis Memory Server port: ${this.redisPort}`);
       return {
@@ -58,8 +83,8 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       };
     }
 
-    // In test mode, use the configured test port
-    const testPort = this.configService.get<number>('redis.port') || 6379;
+    // Fallback to configured test port
+    const testPort = this.configService.get<number>('redis.port') || 6380;
     console.log(`🔧 Using Redis port: ${testPort}`);
     return {
       host: this.configService.get<string>('redis.host') || '127.0.0.1',

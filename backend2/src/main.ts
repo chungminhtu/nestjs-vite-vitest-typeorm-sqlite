@@ -14,9 +14,16 @@ import { AppModule } from './app.module';
 import { getDbConfig } from './orm.config';
 
 export async function createApp(
-  options?: NestApplicationOptions,
+  options?: NestApplicationOptions & { redisPort?: number },
 ): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, options);
+
+  // If Redis port is provided, set it on the ConfigService for Redis connection
+  if (options?.redisPort) {
+    // For backend2, we use ConfigService directly, so we need to override the Redis config
+    // This is a simple approach - in a real app you might want a more sophisticated config override
+    process.env.REDIS_PORT = options.redisPort.toString();
+  }
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -55,14 +62,14 @@ export async function createApp(
   return app;
 }
 
-async function main() {
-  const app = await createApp();
+async function main(options?: { redisPort?: number }) {
+  const app = await createApp(options);
   const port = process.env.PORT || 3001;
   if (process.env.SKIP_MS !== 'true') {
     try {
       const configService = app.get(ConfigService);
       const host = configService.get<string>('redis.host') ?? '127.0.0.1';
-      const rport = parseInt(process.env.REDIS_PORT || '6380', 10);
+      const rport = options?.redisPort || parseInt(process.env.REDIS_PORT || '6380', 10);
       console.log('🔗 Backend2 connecting to Redis at:', { host, port: rport });
       app.connectMicroservice({
         transport: Transport.REDIS,

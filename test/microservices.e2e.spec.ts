@@ -61,10 +61,17 @@ let redisPort: number | null = null;
 
 async function setupBackend1(rport: number) {
   console.log('🔧 Setting up Backend1...');
-  const app = await createBackend1App();
+
+  // Set the Redis port in environment before creating the app
+  process.env.REDIS_PORT = rport.toString();
+  console.log(`🔧 Set REDIS_PORT environment variable to: ${process.env.REDIS_PORT}`);
+
+  const app = await createBackend1App({ redisPort: rport });
+
+  // Verify Redis port is set correctly
   const redisService = app.get(RedisService);
-  await new Promise(res => setTimeout(res, 2000)); // Wait for Redis to be ready
   const redisConfig = redisService.getRedisConfig();
+  console.log(`🔗 Backend1 Redis config:`, redisConfig);
 
   console.log(`🔗 Backend1 connecting to Redis on port ${rport}...`);
   app.connectMicroservice({
@@ -95,7 +102,7 @@ async function setupBackend2(rport: number) {
   console.log('🔧 Setting up Backend2...');
   // do not set fixed REDIS_PORT; pass explicit port
   process.env.SKIP_MS = 'false';
-  const app = await createBackend2App({ logger: false } as any);
+  const app = await createBackend2App({ logger: false, redisPort: rport } as any);
   // Ensure NODE_ENV=test to prevent backend2 main auto-run
   process.env.NODE_ENV = 'test';
 
