@@ -3,7 +3,7 @@ import './App.css';
 import { ProductForm } from './components/ProductForm';
 import { ProductList } from './components/ProductList';
 import { apiService } from './services/api';
-import { CreateProductDto, Product, UpdateProductDto } from './types/Product';
+import type { CreateProductDto, Product, UpdateProductDto } from './types/Product';
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,10 +29,10 @@ function App() {
     loadProducts();
   }, []);
 
-  const handleCreateProduct = async (productData: CreateProductDto) => {
+  const handleCreateProduct = async (productData: CreateProductDto | UpdateProductDto) => {
     try {
       setIsLoading(true);
-      await apiService.createProduct(productData);
+      await apiService.createProduct(productData as CreateProductDto);
       await loadProducts();
       setError('');
     } catch (err) {

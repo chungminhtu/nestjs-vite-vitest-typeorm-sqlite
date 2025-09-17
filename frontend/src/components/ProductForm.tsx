@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CreateProductDto, Product, UpdateProductDto } from '../types/Product';
+import type { CreateProductDto, Product, UpdateProductDto } from '../types/Product';
 
 interface ProductFormProps {
   product?: Product;

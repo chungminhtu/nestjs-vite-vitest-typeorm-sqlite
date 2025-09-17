@@ -1,4 +1,4 @@
-import { Product, CreateProductDto, UpdateProductDto } from '../types/Product';
+import type { CreateProductDto, Product, UpdateProductDto } from '../types/Product';
 
 const API_BASE_URL = 'http://localhost:3000';
 
