@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "humao.rest-client",
+    "tomasnikl.vscode-vitest-runner-for-pnpm",
+    "vscode-icons-team.vscode-icons",
+    "voldemortensen.rainbow-tags",
+    "hediet.vscode-drawio",
+    "zaaack.markdown-editor",
+    "esbenp.prettier-vscode",
+    "yy0931.vscode-sqlite3-editor",
+    "BitBelt.converttoasciiart"
+  ]
+}

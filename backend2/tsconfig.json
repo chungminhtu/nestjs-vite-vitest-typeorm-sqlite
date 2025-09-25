@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "module": "ES2022",
+    "target": "ES2022",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "frontend"
+  ]
+}
