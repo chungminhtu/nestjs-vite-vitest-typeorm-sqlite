@@ -83,8 +83,8 @@ export class ProductService {
       '🔥 Backend createReview called with:',
       JSON.stringify(createReviewDto),
     );
-    // Verify product exists
-    await this.findOne(createReviewDto.rating);
+    // Verify product exists using provided productId
+    await this.findOne(createReviewDto.productId);
     console.log('✅ Product exists, creating review');
 
     const review = this.reviewRepository.create(createReviewDto);
