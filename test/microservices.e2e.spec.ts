@@ -1,4 +1,3 @@
-
 process.env.NODE_ENV = 'e2e';
 
 // Override Redis config for testing
@@ -39,26 +38,42 @@ beforeAll(async () => {
   }).compile();
 
   backend1App = backend1Module.createNestApplication();
-  backend1App.connectMicroservice({ transport: Transport.REDIS, options: redisConfig });
+  backend1App.connectMicroservice({
+    transport: Transport.REDIS,
+    options: redisConfig,
+  });
   await backend1App.startAllMicroservices();
   await backend1App.init();
 
   // Backend2 (Orders) - Using real controllers/services with Redis client
   const backend2Module = await Test.createTestingModule({
     imports: [
-      TypeOrmModule.forRoot({ type: 'sqlite', database: ':memory:', entities: [Order], synchronize: true }),
+      TypeOrmModule.forRoot({
+        type: 'sqlite',
+        database: ':memory:',
+        entities: [Order],
+        synchronize: true,
+      }),
       TypeOrmModule.forFeature([Order]),
-      ClientsModule.registerAsync([{
-        name: 'PRODUCT_SERVICE',
-        useFactory: () => ({ transport: Transport.REDIS, options: redisConfig })
-      }]),
+      ClientsModule.registerAsync([
+        {
+          name: 'PRODUCT_SERVICE',
+          useFactory: () => ({
+            transport: Transport.REDIS,
+            options: redisConfig,
+          }),
+        },
+      ]),
     ],
     controllers: [OrderController],
     providers: [OrderService],
   }).compile();
 
   backend2App = backend2Module.createNestApplication();
-  backend2App.connectMicroservice({ transport: Transport.REDIS, options: redisConfig });
+  backend2App.connectMicroservice({
+    transport: Transport.REDIS,
+    options: redisConfig,
+  });
   await backend2App.startAllMicroservices();
   await backend2App.init();
 });
@@ -67,26 +82,33 @@ afterAll(async () => {
   // Close apps gracefully, ignoring Redis connection errors since Redis might already be stopped
   try {
     await backend1App?.close();
-  } catch (error) {
-    console.log('Backend1 close error (expected if Redis stopped):', error.message);
+  } catch (error: any) {
+    console.log(
+      'Backend1 close error (expected if Redis stopped):',
+      error.message,
+    );
   }
   try {
     await backend2App?.close();
-  } catch (error) {
-    console.log('Backend2 close error (expected if Redis stopped):', error.message);
+  } catch (error: any) {
+    console.log(
+      'Backend2 close error (expected if Redis stopped):',
+      error.message,
+    );
   }
   try {
     await redisServer?.stop();
-  } catch (error) {
+  } catch (error: any) {
     console.log('Redis server stop error:', error.message);
   }
 });
 
 describe('Microservices E2E single file', () => {
-
   it('creates product if needed and verifies listing', async () => {
     // First check if products exist
-    const productsResponse = await request(backend1App!.getHttpServer()).get('/product');
+    const productsResponse = await request(backend1App!.getHttpServer()).get(
+      '/product',
+    );
     expect(productsResponse.status).toBe(200);
     let products = productsResponse.body;
 
@@ -106,7 +128,9 @@ describe('Microservices E2E single file', () => {
       }
 
       // Get products again after creation
-      const productsResponse2 = await request(backend1App!.getHttpServer()).get('/product');
+      const productsResponse2 = await request(backend1App!.getHttpServer()).get(
+        '/product',
+      );
       expect(productsResponse2.status).toBe(200);
       products = productsResponse2.body;
     }
@@ -116,20 +140,26 @@ describe('Microservices E2E single file', () => {
 
   it('backends are reachable', async () => {
     // Test Backend1
-    const backend1Response = await request(backend1App!.getHttpServer()).get('/product');
+    const backend1Response = await request(backend1App!.getHttpServer()).get(
+      '/product',
+    );
     expect(backend1Response.status).toBe(200);
     const products = backend1Response.body;
     expect(Array.isArray(products)).toBe(true);
 
     // Test Backend2
-    const backend2Response = await request(backend2App!.getHttpServer()).get('/order');
+    const backend2Response = await request(backend2App!.getHttpServer()).get(
+      '/order',
+    );
     expect(backend2Response.status).toBe(200);
     const orders = backend2Response.body;
     expect(Array.isArray(orders)).toBe(true);
   });
 
   it('creates order and updates stock via Redis microservice', async () => {
-    const productsResponse = await request(backend1App!.getHttpServer()).get('/product');
+    const productsResponse = await request(backend1App!.getHttpServer()).get(
+      '/product',
+    );
     expect(productsResponse.status).toBe(200);
     const products = productsResponse.body;
     const product = products[0];
@@ -148,20 +178,24 @@ describe('Microservices E2E single file', () => {
     const expected = initialStock - 2;
     const start = Date.now();
     while (Date.now() - start < 5000) {
-      const productResponse = await request(backend1App!.getHttpServer()).get(`/product/${product.id}`);
+      const productResponse = await request(backend1App!.getHttpServer()).get(
+        `/product/${product.id}`,
+      );
       expect(productResponse.status).toBe(200);
       const currentProduct = productResponse.body;
       if (currentProduct.stock === expected) {
         expect(currentProduct.stock).toBe(expected);
         return;
       }
-      await new Promise(res => setTimeout(res, 200));
+      await new Promise((res) => setTimeout(res, 200));
     }
     expect.fail('Stock was not updated');
   });
 
   it('handles multiple orders and final stock consistency', async () => {
-    const productsResponse = await request(backend1App!.getHttpServer()).get('/product');
+    const productsResponse = await request(backend1App!.getHttpServer()).get(
+      '/product',
+    );
     expect(productsResponse.status).toBe(200);
     const products = productsResponse.body;
     const product = products[0];
@@ -182,18 +216,25 @@ describe('Microservices E2E single file', () => {
     const expected = startStock - 3;
     const start = Date.now();
     while (Date.now() - start < 20000) {
-      const productResponse = await request(backend1App!.getHttpServer()).get(`/product/${product.id}`);
+      const productResponse = await request(backend1App!.getHttpServer()).get(
+        `/product/${product.id}`,
+      );
       expect(productResponse.status).toBe(200);
       const currentProduct = productResponse.body;
       if (currentProduct.stock === expected) {
         expect(currentProduct.stock).toBe(expected);
         return;
       }
-      await new Promise(res => setTimeout(res, 500));
+      await new Promise((res) => setTimeout(res, 500));
     }
-    const finalProductResponse = await request(backend1App!.getHttpServer()).get(`/product/${product.id}`);
+    const finalProductResponse = await request(
+      backend1App!.getHttpServer(),
+    ).get(`/product/${product.id}`);
     expect(finalProductResponse.status).toBe(200);
-    expect(finalProductResponse.body.stock, `Expected stock ${expected}, got ${finalProductResponse.body.stock}`).toBe(expected);
+    expect(
+      finalProductResponse.body.stock,
+      `Expected stock ${expected}, got ${finalProductResponse.body.stock}`,
+    ).toBe(expected);
   });
 
   it('tests complete Product CRUD operations', async () => {
@@ -210,7 +251,9 @@ describe('Microservices E2E single file', () => {
     expect(product.id).toBeDefined();
 
     // Read the product
-    const getResponse = await request(backend1App!.getHttpServer()).get(`/product/${product.id}`);
+    const getResponse = await request(backend1App!.getHttpServer()).get(
+      `/product/${product.id}`,
+    );
     expect(getResponse.status).toBe(200);
     expect(getResponse.body.product_name).toBe('CRUD Test Product');
 
@@ -227,11 +270,15 @@ describe('Microservices E2E single file', () => {
     expect(updateResponse.body.stock).toBe(75);
 
     // Delete the product
-    const deleteResponse = await request(backend1App!.getHttpServer()).delete(`/product/${product.id}`);
+    const deleteResponse = await request(backend1App!.getHttpServer()).delete(
+      `/product/${product.id}`,
+    );
     expect([200, 204]).toContain(deleteResponse.status);
 
     // Verify product is deleted
-    const getAfterDelete = await request(backend1App!.getHttpServer()).get(`/product/${product.id}`);
+    const getAfterDelete = await request(backend1App!.getHttpServer()).get(
+      `/product/${product.id}`,
+    );
     expect(getAfterDelete.status).toBe(404);
   });
 
@@ -258,7 +305,9 @@ describe('Microservices E2E single file', () => {
     expect([200, 201]).toContain(createReviewResponse.status);
 
     // Clean up product
-    await request(backend1App!.getHttpServer()).delete(`/product/${product.id}`);
+    await request(backend1App!.getHttpServer()).delete(
+      `/product/${product.id}`,
+    );
   });
 
   it('tests complete Order CRUD operations', async () => {
@@ -287,12 +336,16 @@ describe('Microservices E2E single file', () => {
     expect(order.id).toBeDefined();
 
     // Get all orders
-    const getAllOrdersResponse = await request(backend2App!.getHttpServer()).get('/order');
+    const getAllOrdersResponse = await request(
+      backend2App!.getHttpServer(),
+    ).get('/order');
     expect(getAllOrdersResponse.status).toBe(200);
     expect(Array.isArray(getAllOrdersResponse.body)).toBe(true);
 
     // Get single order
-    const getOrderResponse = await request(backend2App!.getHttpServer()).get(`/order/${order.id}`);
+    const getOrderResponse = await request(backend2App!.getHttpServer()).get(
+      `/order/${order.id}`,
+    );
     expect(getOrderResponse.status).toBe(200);
     expect(getOrderResponse.body.id).toBe(order.id);
 
@@ -306,17 +359,20 @@ describe('Microservices E2E single file', () => {
     expect(updateOrderResponse.body.status).toBe('shipped');
 
     // Delete the order
-    const deleteOrderResponse = await request(backend2App!.getHttpServer()).delete(`/order/${order.id}`);
+    const deleteOrderResponse = await request(
+      backend2App!.getHttpServer(),
+    ).delete(`/order/${order.id}`);
     expect([200, 204]).toContain(deleteOrderResponse.status);
 
     // Verify order is deleted
-    const getOrderAfterDelete = await request(backend2App!.getHttpServer()).get(`/order/${order.id}`);
+    const getOrderAfterDelete = await request(backend2App!.getHttpServer()).get(
+      `/order/${order.id}`,
+    );
     expect([404, 500]).toContain(getOrderAfterDelete.status); // Either 404 or 500 (NotFoundException)
 
     // Clean up product
-    await request(backend1App!.getHttpServer()).delete(`/product/${product.id}`);
+    await request(backend1App!.getHttpServer()).delete(
+      `/product/${product.id}`,
+    );
   });
-
 });
-
-

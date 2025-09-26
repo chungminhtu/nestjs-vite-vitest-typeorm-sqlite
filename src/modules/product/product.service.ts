@@ -7,15 +7,15 @@ import { OrderCreatedMessage } from './dto/order-created.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { Product } from './entities/product.entity';
-import { Review1 } from './entities/review.entity';
+import { Review } from './entities/review.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
-    @InjectRepository(Review1)
-    private reviewRepository: Repository<Review1>,
+    @InjectRepository(Review)
+    private reviewRepository: Repository<Review>,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -38,7 +38,10 @@ export class ProductService {
     return product;
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     const result = await this.productRepository.update(id, updateProductDto);
     if (result.affected === 0) {
       throw new NotFoundException(`Product with ID ${id} not found`);
@@ -63,17 +66,25 @@ export class ProductService {
         return;
       }
       await this.update(data.productId, { stock: newStock });
-      console.log('✅ Stock updated for product', data.productId, 'new stock:', newStock);
+      console.log(
+        '✅ Stock updated for product',
+        data.productId,
+        'new stock:',
+        newStock,
+      );
     } catch (error) {
       console.error('❌ Error updating stock:', error);
     }
   }
 
   // Reviews CRUD methods
-  async createReview(createReviewDto: CreateReviewDto): Promise<Review1> {
-    console.log('🔥 Backend createReview called with:', JSON.stringify(createReviewDto));
+  async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
+    console.log(
+      '🔥 Backend createReview called with:',
+      JSON.stringify(createReviewDto),
+    );
     // Verify product exists
-    await this.findOne(createReviewDto.productId);
+    await this.findOne(createReviewDto.rating);
     console.log('✅ Product exists, creating review');
 
     const review = this.reviewRepository.create(createReviewDto);
@@ -83,22 +94,22 @@ export class ProductService {
     return saved;
   }
 
-  async findAllReviews(): Promise<Review1[]> {
+  async findAllReviews(): Promise<Review[]> {
     return this.reviewRepository.find({
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
-  async findReviewsByProduct(productId: number): Promise<Review1[]> {
+  async findReviewsByProduct(productId: number): Promise<Review[]> {
     // Temporary hack: return all reviews for frontend testing (until routing is fixed)
     return this.reviewRepository.find({
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
-  async findOneReview(id: number): Promise<Review1> {
+  async findOneReview(id: number): Promise<Review> {
     const review = await this.reviewRepository.findOne({
-      where: { id }
+      where: { id },
     });
     if (!review) {
       throw new NotFoundException(`Review with ID ${id} not found`);
@@ -106,7 +117,10 @@ export class ProductService {
     return review;
   }
 
-  async updateReview(id: number, updateReviewDto: UpdateReviewDto): Promise<Review1> {
+  async updateReview(
+    id: number,
+    updateReviewDto: UpdateReviewDto,
+  ): Promise<Review> {
     const result = await this.reviewRepository.update(id, updateReviewDto);
     if (result.affected === 0) {
       throw new NotFoundException(`Review with ID ${id} not found`);
