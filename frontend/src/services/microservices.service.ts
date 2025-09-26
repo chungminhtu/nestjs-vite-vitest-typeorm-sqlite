@@ -78,8 +78,8 @@ class MicroservicesService {
 
   // Review methods
   async getReviews(): Promise<Review[]> {
-    // Use product 1 reviews as a workaround since /product/reviews route doesn't exist
-    const response = await fetch(`${this.PRODUCT_API_BASE}/product/1/reviews`);
+    // Fetch all reviews from backend endpoint
+    const response = await fetch(`${this.PRODUCT_API_BASE}/product/test-route`);
     if (!response.ok) {
       throw new Error('Failed to fetch reviews');
     }
