@@ -87,7 +87,9 @@ main {
 
 .container {
   width: 100%;
-  margin: 0 auto;
+  max-width: none;
+  /* remove width cap */
+  margin: 0;
   padding: 0 1rem;
 }
 
